@@ -103,9 +103,9 @@ class Heap
 
 class Graph {
     class Node {
-        public int vert;
-        public int wgt;
-        public Node next;
+        public int vert; // vertex number
+        public int wgt; // weight
+        public Node next; // next node in the adjacency list
     }
     
     // V = number of vertices
@@ -113,11 +113,11 @@ class Graph {
     // adj[] is the adjacency lists array
     private int V, E;
     private Node[] adj;
-    private Node z;
-    private int[] mst;
+    private Node z; // Sentinel node
+    private int[] mst; // array to store mst info
     
     // used for traversing graph
-    private int[] visited;
+    private int[] visited; // visit tracking fofr traversal algorithims
     private int id;
     
     
@@ -160,11 +160,22 @@ class Graph {
             
             System.out.println("Edge " + toChar(u) + "--(" + wgt + ")--" + toChar(v));   
 
-           
-            
-            // write code to put edge into adjacency matrix     
-            
-        }	       
+          // write code to put edge into adjacency matrix     
+            Node t = new Node();
+            t.vert =  v;
+            t.wgt = wgt;
+            t.next = adj[u];
+            adj[u] = t;
+
+            // add edge v to u
+            t = new Node();
+            t.vert = u;
+            t.wgt = wgt;
+            t.next = adj[v];
+            adj[v] = t;
+        }	    
+        
+        reader.close();
     }
    
     // convert vertex into char for pretty printing
