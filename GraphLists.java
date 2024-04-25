@@ -15,6 +15,8 @@ class Heap
     //    1. maximum heap size
     //    2. reference to the dist[] array
     //    3. reference to the hPos[] array
+
+    // Constructor for Initialising the heap with a max size and distance arrays
     public Heap(int maxSize, int[] _dist, int[] _hPos) 
     {
         N = 0;
@@ -30,33 +32,61 @@ class Heap
     }
 
 
+    // Method to sift up for maintaining heap order
     public void siftUp( int k) 
     {
         int v = a[k];
+        // code yourself       
+        while (dist[v] < dist[a[k / 2]] && k > 1) {
+            a[k] = a[k / 2]; // Move parent node down
+            hPos[a[k]] = k; // Update position of parent node in hPos
+            k = k / 2; // Move to parents index
+        }
 
-        // code yourself
-        // must use hPos[] and dist[] arrays
+        // Place the node v at the correct position where the loop ends
+        a[k] = v;
+        hPos[v] = k; // Updates the position of node v in hPos array
     }
 
 
     public void siftDown( int k) 
     {
-        int v, j;
-       
-        v = a[k];  
-        
+        int v  = a[k]; // Start node at index k
+        int j; // variable for child index
         // code yourself 
-        // must use hPos[] and dist[] arrays
+
+        // Continue sifting down as long as there are children
+        while (k <= N / 2) {
+            j = 2 * k; // Calc the left child index
+            if (j < N && dist[a[j]] > dist[a[j + 1]]) { // Check if there is a right child (j < N) and if it has a lower distance value than the left child.
+                j++; // Use the right child if it has a smaller distance.
+            }
+
+            // If the current node v has a distance less than or equal to the smaller child
+            if (dist[v] <= dist[a[j]]) {
+                break;
+            }
+
+            // Swap the current node with its smaller child
+            a[k] = a[j]; // move child up 
+            hPos[a[k]] = k; // update child position in array
+            k = j; // move child down
+        }
+
+        // place node v at final position where loop ends
+        a[k] = v;
+        hPos[v] = k; // update position node v in array
     }
 
 
+    // Insert an element into the heap
     public void insert( int x) 
     {
         a[++N] = x;
         siftUp( N);
     }
 
-
+    // remove and return the top element from the heap
     public int remove() 
     {   
         int v = a[1];
@@ -201,7 +231,7 @@ public class GraphLists {
     public static void main(String[] args) throws IOException
     {
         int s = 2;
-        String fname = "wGraph3.txt";               
+        String fname = "wGraph1.txt";               
 
         Graph g = new Graph(fname);
        
