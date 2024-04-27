@@ -161,7 +161,7 @@ class Graph {
             System.out.println("Edge " + toChar(u) + "--(" + wgt + ")--" + toChar(v));   
 
           // write code to put edge into adjacency matrix     
-            Node t = new Node();
+            t = new Node();
             t.vert =  v;
             t.wgt = wgt;
             t.next = adj[u];
@@ -199,29 +199,52 @@ class Graph {
 
 
     
-	public void MST_Prim(int s)
-	{
+	public void MST_Prim(int s) {
         int v, u;
         int wgt, wgt_sum = 0;
-        int[]  dist, parent, hPos;
-        Node t;
-
-        //code here
-        
-        //dist[s] = 0;
-        
-        //Heap h =  new Heap(V, dist, hPos);
-        //h.insert(s);
-        
-        //while ( ...)  
-        //{
-            // most of alg here
-            
-       // }
-        System.out.print("\n\nWeight of MST = " + wgt_sum + "\n");
-        
-                  		
-	}
+        int[] dist, parent, hPos;
+    
+        // V is the number of vertices in the graph
+        dist = new int[V+1]; // +1 because the vertices are numbered from 1 to V
+        parent = new int[V+1];
+        hPos = new int[V+1];
+        for (v = 1; v <= V; v++) { // Starting from 1 because the vertices are numbered from 1 to V
+            dist[v] = Integer.MAX_VALUE;
+            parent[v] = 0;
+            hPos[v] = 0;
+        }
+    
+        // Initial distance to the source vertex s is 0
+        dist[s] = 0;
+    
+        // Heap to manage vertices by distance
+        Heap h = new Heap(V, dist, hPos);
+        h.insert(s);
+    
+        // Main loop of Prim's Algorithm
+        while (!h.isEmpty()) {
+            v = h.remove();
+            wgt_sum += dist[v];
+            dist[v] = -dist[v]; // Mark the vertex as included in MST
+    
+            // Examine all the vertices adjacent to vertex v
+            for (Node t = adj[v]; t != z; t = t.next) {
+                u = t.vert;
+                if (dist[u] > t.wgt) {
+                    dist[u] = t.wgt; // Update distance
+                    parent[u] = v; // Update parent
+                    // If vertex u is not in the heap, insert it; otherwise, sift up to update its position
+                    if (hPos[u] == 0) {
+                        h.insert(u);
+                    } else {
+                        h.siftUp(hPos[u]);
+                    }
+                }
+            }
+        }
+    
+        System.out.println("\n\nWeight of MST = " + wgt_sum + "\n");
+    }
     
     public void showMST()
     {
@@ -250,7 +273,7 @@ public class GraphLists {
 
        //g.DF(s);
        //g.breadthFirst(s);
-       //g.MST_Prim(s);   
+       g.MST_Prim(s);   
        //g.SPT_Dijkstra(s);               
     }
 }
